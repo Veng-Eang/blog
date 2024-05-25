@@ -1,7 +1,9 @@
 import 'package:clean_architecture/core/theme/app_pallete.dart';
+import 'package:clean_architecture/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:clean_architecture/features/auth/presentation/widget/auth_gradient_button.dart';
 import 'package:clean_architecture/features/auth/presentation/widget/auth_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -48,7 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   AuthTextFormField(
                     hintText: "Email",
                     controller: _emailCtlr,
-
                   ),
                   const SizedBox(height: 15),
                   AuthTextFormField(
@@ -57,7 +58,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 15),
-                  AuthGradientButton(textButton: "Sign Up"),
+                  AuthGradientButton(
+                    textButton: "Sign Up",
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(AuthSignUp(
+                              name: _nameCtlr.text.trim(),
+                              email: _emailCtlr.text.trim(),
+                              password: _passwordCtlr.text.trim(),
+                            ));
+                      }
+                    },
+                  ),
                   const SizedBox(height: 15.0),
                   GestureDetector(
                     onTap: () {
